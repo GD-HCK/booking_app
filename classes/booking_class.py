@@ -1,4 +1,4 @@
-"""Product Class"""
+"""Booking Class"""
 import pyodbc
 import json
 from classes.configuration import *
@@ -6,8 +6,8 @@ from classes.configuration import *
 # Database connection string
 conn_str = get_connection_string()
 
-# api/products/product.py
-class Product:
+# api/bookings/booking.py
+class Booking:
     def __init__(self, name, price, category, id=None):
         self.id = id
         self.name = name
@@ -35,41 +35,41 @@ def run_query_post(query: str, *params) -> int:
     conn.close()
     return 1
 
-def add_product(product: Product):
+def add_booking(booking: Booking):
     try:
-        product_exists = run_query_get('SELECT id FROM Product WHERE id = ?', (product.id,))
-        if product_exists:
-            return "Product already exists."
+        booking_exists = run_query_get('SELECT id FROM Booking WHERE id = ?', (booking.id,))
+        if booking_exists:
+            return "Booking already exists."
         
         run_query_post('''
-            INSERT INTO Product (name, price, category)
+            INSERT INTO Booking (name, price, category)
             VALUES (?, ?, ?)
-        ''', (product.name, product.price, product.category))
+        ''', (booking.name, booking.price, booking.category))
 
-        id = run_query_get('SELECT TOP 1 id FROM Product ORDER BY id DESC')[0][0]
+        id = run_query_get('SELECT TOP 1 id FROM Booking ORDER BY id DESC')[0][0]
         return f"""
-Adding a product:
-Product ID: {id}
-Product Name: {product.name}
-Product Price: {product.price}
-Product Category: {product.category}
+Adding a booking:
+Booking ID: {id}
+Booking Name: {booking.name}
+Booking Price: {booking.price}
+Booking Category: {booking.category}
 """
     except Exception as e:
         return json.dumps({'status':"Error", 'message':str(e)})
 
-def get_products():
+def get_bookings():
     try:
-        products = run_query_get('SELECT * FROM Product')
-        return [Product(id=row[0], name=row[1], price=row[2], category=row[3]).__dict__ for row in products]
+        bookings = run_query_get('SELECT * FROM Booking')
+        return [Booking(id=row[0], name=row[1], price=row[2], category=row[3]).__dict__ for row in bookings]
     except Exception as e:
         return json.dumps({'status':"Error", 'message':str(e)})
     
-def get_product_with_args(args):
+def get_booking_with_args(args):
     try:
         # List of valid column names
         valid_columns = ['id', 'name', 'price', 'category']
         counter = 0
-        query = 'SELECT * FROM Product WHERE '
+        query = 'SELECT * FROM Booking WHERE '
         query_params = []
         
         for arg in args:
@@ -87,10 +87,10 @@ def get_product_with_args(args):
             raise Exception("Supply at least one valid parameter")
         
         # Assuming run_query_get is a function that executes the query with parameters
-        products = run_query_get(query, query_params)
+        bookings = run_query_get(query, query_params)
         
-        if products:
-            return [Product(id=product[0], name=product[1], price=product[2], category=product[3]).__dict__ for product in products]
-        return {"error": "Product not found", 'parameters': args}, 404
+        if bookings:
+            return [Booking(id=booking[0], name=booking[1], price=booking[2], category=booking[3]).__dict__ for booking in bookings]
+        return {"error": "Booking not found", 'parameters': args}, 404
     except Exception as e:
         return json.dumps({'status': "Error", 'message': str(e)})
