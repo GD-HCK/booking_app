@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>List of products</h1>
+
+<!-- pairs is a list that must be sent here by a route function The list will contain 45 pairs: a presidency number, and a president's name -->
+
+<ul>
+    {% for product in products %}
+    <li>{{ product['id'] }},{{ product['name'] }},{{ product['price'] }},{{ product['category'] }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ the_title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <icon rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+</head>
+<body>
+    <div>
+        <!-- Jinja directives: page contents will go between them -->
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

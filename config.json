@@ -1,0 +1,9 @@
+{
+    "connection_string": {
+        "driver": "ODBC Driver 17 for SQL Server",
+        "server": "03334CIP",
+        "database": "booking_app",
+        "uid": "sql_user_booking",
+        "pwd": "Password123"
+    }
+}
