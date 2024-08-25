@@ -4,9 +4,9 @@
 
 {% block content %}
 
-<h1>Login</h1>
+<h1>Register</h1>
 
-<form method="POST" action="{{ url_for('authentication_controller.login') }}">
+<form method="POST" action="{{ url_for('authentication_controller.register') }}">
     <div>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -16,10 +16,8 @@
         <input type="password" id="password" name="password" required>
     </div>
     <div>
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
     </div>
 </form>
-
-<a href="{{ url_for('authentication_controller.register') }}">Register</a>
 
 {% endblock %}

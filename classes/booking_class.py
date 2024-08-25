@@ -9,11 +9,12 @@ conn_str = get_connection_string()
 
 # api/bookings/booking.py
 class Booking:
-    def __init__(self, name, price, category, id=None):
+    def __init__(self, id, user_id, start_date, end_date, status):
         self.id = id
-        self.name = name
-        self.price = price
-        self.category = category
+        self.user_id = user_id
+        self.start_date = start_date
+        self.end_date = end_date
+        self.status = status
 
     @classmethod
     def from_dict(cls, data):

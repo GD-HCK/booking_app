@@ -3,13 +3,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ the_title }}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <icon rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 </head>
 <body>
     <div>
         <!-- Jinja directives: page contents will go between them -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         {% block content %}
         {% endblock %}
     </div>

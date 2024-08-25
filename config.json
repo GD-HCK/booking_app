@@ -2,7 +2,7 @@
     "connection_string": {
         "driver": "ODBC Driver 17 for SQL Server",
         "server": "03334CIP",
-        "database": "booking_app",
+        "database": "flask",
         "username": "flask",
         "password": "Password123"
     },
