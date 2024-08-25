@@ -1,12 +1,15 @@
 # app/routes/authentication_controller.py
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from ..classes.user_class import *
 
-app = Blueprint('authentication_controller', __name__, url_prefix='/authentication')
+app = Blueprint('authentication_controller', __name__)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('booking_controller.index'))
+                        
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']

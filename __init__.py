@@ -22,11 +22,11 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.get(int(user_id))
+        return User.get_user(int(user_id))
 
     with app.app_context():
         from .routes import booking_controller, authentication_controller, index_controller
-        app.register_blueprint(booking_controller.app)
-        app.register_blueprint(authentication_controller.app)
+        app.register_blueprint(booking_controller.app, url_prefix='/bookings')
+        app.register_blueprint(authentication_controller.app, url_prefix='/authentication')
         app.register_blueprint(index_controller.app)
         return app
