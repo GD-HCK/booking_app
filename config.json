@@ -3,7 +3,7 @@
         "driver": "ODBC Driver 17 for SQL Server",
         "server": "03334CIP",
         "database": "booking_app",
-        "username": "sql_user_booking",
+        "username": "flask",
         "password": "Password123"
     },
     "security": {

@@ -10,14 +10,14 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.get_user(username)
-        if user['status'] == 'Success':
-            if user and user.password == password:
-                login_user(user)
+        result = User.get_user(username)
+        if result['status'] == 'Success':
+            if result and result.password == password:
+                login_user(result)
                 return redirect(url_for('booking_controller.index'))
             flash('Invalid username or password')
         else:
-            flash(user['message'])
+            flash(result['message'])
     return render_template('login.html')
 
 @app.route('/logout')

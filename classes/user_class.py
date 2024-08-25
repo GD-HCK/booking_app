@@ -41,6 +41,8 @@ class User(UserMixin):
                 user = [run_query_get(f"SELECT * FROM Users WHERE [{property}] = '{value}'")]
             if len(user) > 1:
                 return {'status':"Error", 'message':"Multiple users found."}
+            elif len(user) > 0:
+                return {'status':"Error", 'message':"User not found."}
             else:
                 return {'status':'Success', 'result': User.from_dict(user[0][0])}
         except Exception as e:
