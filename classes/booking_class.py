@@ -1,7 +1,8 @@
 """Booking Class"""
 import pyodbc
 import json
-from classes.configuration import *
+
+from classes import get_connection_string
 
 # Database connection string
 conn_str = get_connection_string()

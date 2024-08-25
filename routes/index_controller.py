@@ -1,6 +1,6 @@
 # app.py
 from flask import Blueprint, request, jsonify, render_template
-app = Blueprint('index', __name__)
+app = Blueprint('index_controller', __name__)
 
 @app.route('/')
 def index():
