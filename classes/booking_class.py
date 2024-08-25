@@ -2,7 +2,7 @@
 import pyodbc
 import json
 
-from classes import get_connection_string
+from . import get_connection_string
 
 # Database connection string
 conn_str = get_connection_string()

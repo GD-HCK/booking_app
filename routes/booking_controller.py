@@ -1,5 +1,5 @@
 # booking_form_blueprint.py
-from classes.booking_class import *
+from ..classes.booking_class import *
 from flask import Blueprint, request, jsonify, render_template, redirect
 from flask_login import login_required
 app = Blueprint('booking_controller', __name__)

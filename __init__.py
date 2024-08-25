@@ -2,7 +2,7 @@
 import json
 from flask import Flask
 from flask_login import LoginManager
-from classes.user_class import User
+from .classes.user_class import User
 
 def load_config(file_path='config.json'):
     with open(file_path, 'r') as config_file:
@@ -18,7 +18,7 @@ def create_app():
 
     login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = 'authentication_controller.login'
 
     @login_manager.user_loader
     def load_user(user_id):

@@ -1,7 +1,7 @@
 # app/routes/authentication_controller.py
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required
-from classes.user_class import *
+from ..classes.user_class import *
 
 app = Blueprint('authentication_controller', __name__, url_prefix='/authentication')
 
