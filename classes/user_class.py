@@ -1,7 +1,6 @@
 # app/models.py
-import pyodbc
 from flask_login import UserMixin
-from sql_class import *
+from .sql_class import *
 from . import *
 
 class User(UserMixin):
@@ -19,18 +18,18 @@ class User(UserMixin):
         try:
             users = run_query_get(f"SELECT * FROM Users WHERE [id] = {id}")
             if len(users) > 1:
-                return {'status':"Error", 'message':f"Multiple users found with id {id}."}
+                return {'status':"error", 'message':f"Multiple users found with id {id}."}
             elif len(users) == 0:
-                return {'status':"Error", 'message':f"User with id {id} not found."}
+                return {'status':"error", 'message':f"User with id {id} not found."}
             else:
                 return {'status':'Success', 'result': User.from_dict(users[0]['dictionary'])}
         except Exception as e:
-            return {'status':"Error", 'message':str(e)}
+            return {'status':"error", 'message':str(e)}
     
     @classmethod
     def get_user_by_username(cls, username):
         try:
-            users = [run_query_get(f"SELECT * FROM Users WHERE [username] = '{username}'")]
+            users = run_query_get(f"SELECT * FROM Users WHERE [username] = '{username}'")
             if len(users) > 1:
                 return {'status':"multiple_users_found", 'message':f"Multiple users found for {username}."}
             elif len(users) == 0:
@@ -38,9 +37,8 @@ class User(UserMixin):
             else:
                 return {'status':'found', 'result': User.from_dict(users[0]['dictionary'])}
         except Exception as e:
-            return {'status':"Error", 'message':str(e)}
+            return {'status':"error", 'message':str(e)}
     
-
     @classmethod
     def create_new_user(cls, username, password):
         try:
@@ -50,8 +48,8 @@ class User(UserMixin):
                     INSERT INTO Users (username, password)
                     VALUES (?, ?)
                 ''', (username, password))
-                return {'status':'Created', 'result': User.get_user_by_username(username)}
+                return {'status':'created', 'result': User.get_user_by_username(username)['result']}
             else:
                 return {'status':'found', 'message':f"User {username} already exists"}
         except Exception as e:
-            return {'status':"Error", 'message':str(e)}
+            return {'status':"error", 'message':str(e)}

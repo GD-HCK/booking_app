@@ -1,7 +1,6 @@
 """Booking Class"""
-import pyodbc
 import json
-from sql_class import *
+from .sql_class import *
 
 class Booking:
     def __init__(self, id, user_id, start_date, end_date, status):
