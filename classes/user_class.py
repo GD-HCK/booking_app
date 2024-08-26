@@ -8,6 +8,7 @@ class User(UserMixin):
         self.id = id
         self.username = username
         self.password = password
+        self.is_authenticated = False
     
     @classmethod
     def from_dict(cls, data):
@@ -51,5 +52,17 @@ class User(UserMixin):
                 return {'status':'created', 'result': User.get_user_by_username(username)['result']}
             else:
                 return {'status':'found', 'message':f"User {username} already exists"}
+        except Exception as e:
+            return {'status':"error", 'message':str(e)}
+    
+    @classmethod
+    def update_user(cls, id, property, value):
+        try:
+            user = User.get_user_by_id(id)
+            if user['status']=='found':
+                run_query_post("UPDATE Users SET [?] = '?'", (property, value))
+                return {'status':'updated', 'result': User.get_user_by_id(id)['result']}
+            else:
+                return {'status':'not_found', 'message':f"User with {id} does not exists"}
         except Exception as e:
             return {'status':"error", 'message':str(e)}

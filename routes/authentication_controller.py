@@ -18,6 +18,7 @@ def login():
         if result['status'] == 'found':
             if result and result['result'].password == password:
                 login_user(result['result'])
+                User.update_user(result['result'].id, 'is_authenticated', True)
                 return redirect(url_for('booking_controller.index'))
             flash('Invalid username or password')
         else:
