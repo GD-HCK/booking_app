@@ -15,7 +15,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         result = User.get_user_by_username(username)
-        if result['status'] == 'Success':
+        if result['status'] == 'found':
             if result and result.password == password:
                 login_user(result)
                 return redirect(url_for('booking_controller.index'))
@@ -39,7 +39,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
         result = User.create_new_user(username, password)
-        if result['status'] == 'Success':
+        if result['status'] == 'Created':
             flash('User registered successfully')
         else:
             flash(result['message'])

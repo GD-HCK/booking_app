@@ -50,11 +50,11 @@ class User(UserMixin):
         try:
             users = [run_query_get(f"SELECT * FROM Users WHERE [username] = '{username}'")]
             if len(users) > 1:
-                return {'status':"Error", 'message':f"Multiple users found for {username}."}
+                return {'status':"multiple_users_found", 'message':f"Multiple users found for {username}."}
             elif len(users) == 0:
-                return {'status':"Error", 'message':f"User for {username} not found."}
+                return {'status':"not_found", 'message':f"User for {username} not found."}
             else:
-                return {'status':'Success', 'result': User.from_dict(users[0])}
+                return {'status':'found', 'result': User.from_dict(users[0])}
         except Exception as e:
             return {'status':"Error", 'message':str(e)}
     
@@ -63,13 +63,13 @@ class User(UserMixin):
     def create_new_user(cls, username, password):
         try:
             user = User.get_user_by_username(username)
-            if not user:
+            if user['status']=='not_found':
                 run_query_post('''
                     INSERT INTO Users (username, password)
                     VALUES (?, ?)
                 ''', (username, password))
-                return {'status':'Success', 'result': User.get_user_by_username(username)}
+                return {'status':'Created', 'result': User.get_user_by_username(username)}
             else:
-                return {'status':'Error', 'message':f"User {username} already exists"}
+                return {'status':'found', 'message':f"User {username} already exists"}
         except Exception as e:
             return {'status':"Error", 'message':str(e)}

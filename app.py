@@ -34,5 +34,5 @@ app.register_blueprint(booking_controller, url_prefix='/bookings')
 app.register_blueprint(authentication_controller, url_prefix='/authentication')
 app.register_blueprint(index_controller)
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run()
