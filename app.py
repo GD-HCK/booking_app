@@ -28,7 +28,7 @@ login_manager.login_view = 'authentication_controller.login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get_user(int(user_id))
+    return User.get_user_by_id(int(user_id))
 
 app.register_blueprint(booking_controller, url_prefix='/bookings')
 app.register_blueprint(authentication_controller, url_prefix='/authentication')
