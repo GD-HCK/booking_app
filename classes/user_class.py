@@ -1,7 +1,7 @@
 # app/models.py
 from flask_login import UserMixin
-from .. import run_query_get, run_query_post
-from ..app import dbcontext as db
+from .sql import run_query_get, run_query_post
+from ..db_context import db
 
 class User(UserMixin, db.Model):
     __tablename__ = 'Users'
