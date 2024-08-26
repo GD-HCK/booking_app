@@ -1,26 +1,8 @@
 # app/models.py
 import pyodbc
 from flask_login import UserMixin
+from sql_class import *
 from . import *
-
-# Database connection string
-conn_str = get_connection_string()
-
-def run_query_get(query: str, *params) -> list:
-    conn = pyodbc.connect(conn_str)
-    cursor = conn.cursor()
-    cursor.execute(query, *params)
-    result = cursor.fetchall()
-    conn.close()
-    return result
-
-def run_query_post(query: str, *params) -> int:
-    conn = pyodbc.connect(conn_str)
-    cursor = conn.cursor()
-    cursor.execute(query, *params)
-    conn.commit()
-    conn.close()
-    return 1
 
 class User(UserMixin):
     def __init__(self, id, username, password):
@@ -35,13 +17,13 @@ class User(UserMixin):
     @classmethod
     def get_user_by_id(cls, id):
         try:
-            users = [run_query_get(f"SELECT * FROM Users WHERE [id] = {id}")]
+            users = run_query_get(f"SELECT * FROM Users WHERE [id] = {id}")
             if len(users) > 1:
                 return {'status':"Error", 'message':f"Multiple users found with id {id}."}
             elif len(users) == 0:
                 return {'status':"Error", 'message':f"User with id {id} not found."}
             else:
-                return {'status':'Success', 'result': User.from_dict(users[0])}
+                return {'status':'Success', 'result': User.from_dict(users[0]['dictionary'])}
         except Exception as e:
             return {'status':"Error", 'message':str(e)}
     
@@ -54,7 +36,7 @@ class User(UserMixin):
             elif len(users) == 0:
                 return {'status':"not_found", 'message':f"User for {username} not found."}
             else:
-                return {'status':'found', 'result': User.from_dict(users[0])}
+                return {'status':'found', 'result': User.from_dict(users[0]['dictionary'])}
         except Exception as e:
             return {'status':"Error", 'message':str(e)}
     

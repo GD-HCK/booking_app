@@ -1,13 +1,8 @@
 """Booking Class"""
 import pyodbc
 import json
+from sql_class import *
 
-from . import get_connection_string
-
-# Database connection string
-conn_str = get_connection_string()
-
-# api/bookings/booking.py
 class Booking:
     def __init__(self, id, user_id, start_date, end_date, status):
         self.id = id
@@ -20,22 +15,6 @@ class Booking:
     def from_dict(cls, data):
         return cls(**data)
 
-
-def run_query_get(query: str, *params) -> list:
-    conn = pyodbc.connect(conn_str)
-    cursor = conn.cursor()
-    cursor.execute(query, *params)
-    result = cursor.fetchall()
-    conn.close()
-    return result
-
-def run_query_post(query: str, *params) -> int:
-    conn = pyodbc.connect(conn_str)
-    cursor = conn.cursor()
-    cursor.execute(query, *params)
-    conn.commit()
-    conn.close()
-    return 1
 
 def add_booking(booking: Booking):
     try:
