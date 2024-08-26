@@ -10,6 +10,8 @@ from .classes.user_class import User
 from .routes.booking_controller import app as booking_controller
 from .routes.authentication_controller import app as authentication_controller
 from .routes.index_controller import app as index_controller
+from flask_sqlalchemy import SQLAlchemy
+from . import *
 
 def load_config(file_path='config.json'):
     with open(file_path, 'r') as config_file:
@@ -21,6 +23,11 @@ def get_secret_key():
 
 app = Flask(__name__)
 app.secret_key = get_secret_key()
+
+app.config['SQLALCHEMY_DATABASE_URI'] = get_sqlalchemy_connection_string()
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

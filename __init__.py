@@ -1,32 +1,19 @@
-# # app/__init__.py
-# import json
-# from flask import Flask
-# from flask_login import LoginManager
-# from .classes.user_class import User
+import json
 
-# def load_config(file_path='config.json'):
-#     with open(file_path, 'r') as config_file:
-#         return json.load(config_file)
+def load_config(file_path='config.json'):
+    with open(file_path, 'r') as config_file:
+        return json.load(config_file)
 
-# def get_secret_key():
-#     config = load_config()
-#     return config['security']['secret_key']
+config = load_config()
 
-# def create_app():
-#     app = Flask(__name__)
-#     app.secret_key = get_secret_key()
+def get_connection_string():
+    return (
+        f"DRIVER={config['connection_string']['driver']};"
+        f"SERVER={config['connection_string']['server']};"
+        f"DATABASE={config['connection_string']['database']};"
+        f"UID={config['connection_string']['username']};"
+        f"PWD={config['connection_string']['password']}"
+    )
 
-#     login_manager = LoginManager()
-#     login_manager.init_app(app)
-#     login_manager.login_view = 'authentication_controller.login'
-
-#     @login_manager.user_loader
-#     def load_user(user_id):
-#         return User.get_user(int(user_id))
-
-#     with app.app_context():
-#         from .routes import booking_controller, authentication_controller, index_controller
-#         app.register_blueprint(booking_controller.app, url_prefix='/bookings')
-#         app.register_blueprint(authentication_controller.app, url_prefix='/authentication')
-#         app.register_blueprint(index_controller.app)
-#         return app
+def get_sqlalchemy_connection_string():
+    return f'mssql+pyodbc://{config['connection_string']['username']}:{config['connection_string']['password']}@{config['connection_string']['server']}/{config['connection_string']['database']}?driver={config['connection_string']['driver'].replace(" ", "+")}'

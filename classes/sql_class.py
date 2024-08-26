@@ -1,6 +1,6 @@
 # app/models.py
 import pyodbc
-from . import *
+from .. import *
 
 # Database connection string
 conn_str = get_connection_string()

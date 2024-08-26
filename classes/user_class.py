@@ -1,14 +1,21 @@
 # app/models.py
 from flask_login import UserMixin
 from .sql_class import *
-from . import *
+from ..app import db
 
-class User(UserMixin):
-    def __init__(self, id, username, password):
+class User(UserMixin, db.Model):
+    __tablename__ = 'Users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+    is_authenticated = db.Column(db.Boolean, default=False)
+
+    def __init__(self, id, username, password, is_authenticated=False):
         self.id = id
         self.username = username
         self.password = password
-        self.is_authenticated = False
+        self.is_authenticated = is_authenticated
     
     @classmethod
     def from_dict(cls, data):
@@ -17,43 +24,40 @@ class User(UserMixin):
     @classmethod
     def get_user_by_id(cls, id):
         try:
-            users = run_query_get(f"SELECT * FROM Users WHERE [id] = {id}")
-            if len(users) > 1:
-                return {'status':"error", 'message':f"Multiple users found with id {id}."}
-            elif len(users) == 0:
-                return {'status':"error", 'message':f"User with id {id} not found."}
+            user = cls.query.filter_by(id=id).first()
+            if user:
+                return {'status': 'success', 'result': user}
             else:
-                return {'status':'Success', 'result': User.from_dict(users[0]['dictionary'])}
+                return {'status': 'error', 'message': f"User with id {id} not found."}
         except Exception as e:
-            return {'status':"error", 'message':str(e)}
+            return {'status': 'error', 'message': str(e)}
+
     
     @classmethod
     def get_user_by_username(cls, username):
         try:
-            users = run_query_get(f"SELECT * FROM Users WHERE [username] = '{username}'")
-            if len(users) > 1:
-                return {'status':"multiple_users_found", 'message':f"Multiple users found for {username}."}
-            elif len(users) == 0:
-                return {'status':"not_found", 'message':f"User for {username} not found."}
+            user = cls.query.filter_by(username=username).first()
+            if user:
+                return {'status': 'found', 'result': user}
             else:
-                return {'status':'found', 'result': User.from_dict(users[0]['dictionary'])}
+                return {'status': 'not_found', 'message': f"User for {username} not found."}
         except Exception as e:
-            return {'status':"error", 'message':str(e)}
+            return {'status': 'error', 'message': str(e)}
+
     
     @classmethod
     def create_new_user(cls, username, password):
         try:
-            user = User.get_user_by_username(username)
-            if user['status']=='not_found':
-                run_query_post('''
-                    INSERT INTO Users (username, password)
-                    VALUES (?, ?)
-                ''', (username, password))
-                return {'status':'created', 'result': User.get_user_by_username(username)['result']}
+            user = cls.get_user_by_username(username)
+            if user['status'] == 'not_found':
+                new_user = cls(username=username, password=password)
+                db.session.add(new_user)
+                db.session.commit()
+                return {'status': 'Success', 'result': new_user}
             else:
-                return {'status':'found', 'message':f"User {username} already exists"}
+                return {'status': 'error', 'message': f"User with username {username} already exists."}
         except Exception as e:
-            return {'status':"error", 'message':str(e)}
+            return {'status': 'error', 'message': str(e)}
     
     @classmethod
     def update_user(cls, id, property, value):
