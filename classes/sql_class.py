@@ -1,5 +1,5 @@
 import pyodbc
-from ..app import get_connection_string
+from ..configuration import get_connection_string
 
 conn_str = get_connection_string()
 
