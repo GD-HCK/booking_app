@@ -10,13 +10,34 @@ from flasgger import Swagger
 
 def create_app():
     app = Flask(__name__)
-    swagger = Swagger(app, template={
-        "info": {
-            "title": "My Flask API",
-            "description": "An example API using Flask and Swagger",
-            "version": "1.0.0"
-        }
-    })
+
+    # Configure Flasgger
+    swagger_config = {
+        "headers": [],
+        "specs": [
+            {
+                "endpoint": 'docs',
+                "route": '/docs/docs.json',
+                "rule_filter": lambda rule: True,  # all in
+                "model_filter": lambda tag: True,  # all in
+            }
+        ],
+        "static_url_path": "/flasgger_static",
+        "swagger_ui": True,
+        "specs_route": "/help/"
+    }
+
+    swagger = Swagger(
+        app, 
+        template = {
+            "info": {
+                "title": "My Flask API",
+                "description": "An example API using Flask and Swagger",
+                "version": "1.0.0"
+            }
+        },
+        config = swagger_config
+    )
 
     file_path='config.json'
     with open(file_path, 'r') as config_file:
