@@ -28,7 +28,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.get_user_by_id(int(user_id))
+        return User.load_user_by_user_id(user_id)
 
     with app.app_context():
         db.create_all()

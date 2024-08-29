@@ -8,8 +8,11 @@ app = Blueprint('authentication_controller', __name__)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # if current_user['status'] == 'success':
+    #         if current_user['result'].is_authenticated:
+    #             return redirect(url_for('booking_controller.index'))
     if current_user.is_authenticated:
-        return redirect(url_for('booking_controller.index'))
+            return redirect(url_for('booking_controller.index'))
                         
     if request.method == 'POST':
         username = request.form['username']
@@ -18,7 +21,7 @@ def login():
         if result['status'] == 'found':
             if result and result['result'].password == password:
                 login_user(result['result'])
-                User.update_user(result['result'].id, 'is_authenticated', True)
+                User.update_user(result['result'].user_id, 'is_authenticated', True)
                 return redirect(url_for('booking_controller.index'))
             flash('Invalid username or password')
         else:
@@ -34,7 +37,7 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('booking_controller.index'))
+            return redirect(url_for('booking_controller.index'))
     
     if request.method == 'POST':
         username = request.form['username']
