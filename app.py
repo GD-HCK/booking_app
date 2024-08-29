@@ -6,9 +6,17 @@ from .routes.booking_controller import app as booking_controller
 from .routes.authentication_controller import app as authentication_controller
 from .routes.index_controller import app as index_controller
 from .db_context import db
+from flasgger import Swagger
 
 def create_app():
     app = Flask(__name__)
+    swagger = Swagger(app, template={
+        "info": {
+            "title": "My Flask API",
+            "description": "An example API using Flask and Swagger",
+            "version": "1.0.0"
+        }
+    })
 
     file_path='config.json'
     with open(file_path, 'r') as config_file:

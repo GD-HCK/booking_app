@@ -8,6 +8,18 @@ app = Blueprint('authentication_controller', __name__)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    This is an example endpoint that returns a User object'
+    ---
+    tags:
+        - Greetings
+    description: Returns a friendly greeting.
+    responses:
+        200:
+            description: A successful response
+            examples:
+                application/json: "Hello, World!"
+    """
     # if current_user['status'] == 'success':
     #         if current_user['result'].is_authenticated:
     #             return redirect(url_for('booking_controller.index'))
